@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { NoteSource, GET_URL, POST_URL } from './model/noteSource.model';
+import { ModelModule } from './model/model.module';
 
 
 @NgModule({
@@ -16,9 +16,9 @@ import { NoteSource, GET_URL, POST_URL } from './model/noteSource.model';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule, ModelModule
   ],
-  providers: [NoteSource,{ provide: GET_URL, useValue: `https://dev-simplrsolutions.azurewebsites.net/api/common/getNote` },{ provide: POST_URL, useValue: `https://dev-simplrsolutions.azurewebsites.net/api/common/postNote` }],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

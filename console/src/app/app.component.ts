@@ -1,7 +1,6 @@
-import {Component} from '@angular/core';
-import { NoteSource } from './model/noteSource.model';
-import { PostBody } from './model/postBody.model';
-import { GetBody } from './model/getBody.model';
+///<reference types="chrome"/>
+import { Component, HostListener} from '@angular/core';
+import { GetBody,PostBody, NoteSource } from './model';
 
 @Component({
   selector: 'app-root', 
@@ -9,26 +8,30 @@ import { GetBody } from './model/getBody.model';
   styleUrls: ['./app.component.css']})
 
 export class AppComponent {
-  private getBody=new GetBody("https://google.com/1234");
-  private postBody= new PostBody("https://google.com/1234","This is a test note body from angular")
+  textAreaContent:string='';
+  current_url='';  
   constructor(private noteSource:NoteSource){
+    parent.postMessage("to parent","*")
 
   }
+  @HostListener("window:message",["$event"])
+  onMessage(event: any){
+    this.current_url=event.origin;
+  
+  }
   getNote(){
-    this.noteSource.getNote(this.getBody).subscribe((res)=>{
-      console.log("this is response from getNote");
-     // console.log(res)
+    let getBody=new GetBody(`${this.current_url}`)
+    this.noteSource.getNote(getBody).subscribe((res)=>{      
+      console.log("GET Response")
+      console.log(res)
     })
   }
   postNote(){
-    this.noteSource.postNote(this.postBody).subscribe((res)=>{
-      console.log("this is response from postNote");
-      console.log(res)
+      let postBody= new PostBody(`${this.current_url}`,`${this.textAreaContent}`)   
+      this.noteSource.postNote(postBody).subscribe((res)=>{      
+        console.log("POST Response")
+        console.log(res)
     })
 
   }
-    textAreaContent:string='';
-    logContent(){
-      console.log("Content :"+this.textAreaContent);
-    }
 }
